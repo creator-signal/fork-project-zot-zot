@@ -16,11 +16,15 @@ FROM --platform=$BUILDPLATFORM ghcr.io/project-zot/golang:1.26 AS builder
 ARG TARGETOS
 ARG TARGETARCH
 ARG COMMIT
+ARG ZUI_REPO_OWNER=project-zot
+ARG ZUI_REPO_NAME=zui
+ARG ZUI_VERSION=commit-c75f6bd
 
 RUN mkdir -p /go/src/github.com/project-zot/zot
 WORKDIR /go/src/github.com/project-zot/zot
 COPY . .
-RUN make COMMIT=$COMMIT OS=$TARGETOS ARCH=$TARGETARCH clean binary
+RUN make COMMIT=$COMMIT OS=$TARGETOS ARCH=$TARGETARCH \
+    ZUI_REPO_OWNER=$ZUI_REPO_OWNER ZUI_REPO_NAME=$ZUI_REPO_NAME ZUI_VERSION=$ZUI_VERSION clean binary
 RUN echo '{\n\
     "storage": {\n\
         "rootDirectory": "/var/lib/registry"\n\
